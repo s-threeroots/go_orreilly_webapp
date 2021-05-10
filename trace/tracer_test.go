@@ -19,6 +19,11 @@ func TestNew(t *testing.T) {
 
 }
 
+func TestOff(t *testing.T) {
+	var silentTracer Tracer = Off()
+	silentTracer.Trace("データ")
+}
+
 /*
 func TestNew(t *testing.T) {
 	t.Error("まだテストを作成していません")

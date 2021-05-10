@@ -9,6 +9,11 @@ import (
 	"path/filepath"
 	"sync"
 	"text/template"
+
+	"github.com/stretchr/gomniauth"
+	_ "github.com/stretchr/gomniauth/providers/facebook"
+	_ "github.com/stretchr/gomniauth/providers/github"
+	"github.com/stretchr/gomniauth/providers/google"
 )
 
 var PROJECT_ROOT = "C:\\Users\\s.mine\\dev\\oreilly\\"
@@ -33,9 +38,26 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var addr = flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse()
+
+	var authInfo = AuthInfo{}
+
+	err := readJson("client_secret.json", &authInfo)
+
+	if err != nil {
+		log.Fatal("read client secret err:", err)
+	}
+
+	gomniauth.SetSecurityKey(authInfo.SecretKey)
+
+	gomniauth.WithProviders(
+		google.New(authInfo.ClientSecret.ClientID, authInfo.ClientSecret.ClientSecret, "http://localhost:8080/auth/callback/google"),
+	)
+
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
-	http.Handle("/", &templateHandler{filename: "chat.html"})
+	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
+	http.Handle("/login", &templateHandler{filename: "login.html"})
+	http.HandleFunc("/auth/", loginHandler)
 	http.Handle("/room", r)
 
 	go r.run()
