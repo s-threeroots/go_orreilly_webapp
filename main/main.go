@@ -14,6 +14,7 @@ import (
 	_ "github.com/stretchr/gomniauth/providers/facebook"
 	_ "github.com/stretchr/gomniauth/providers/github"
 	"github.com/stretchr/gomniauth/providers/google"
+	"github.com/stretchr/objx"
 )
 
 var PROJECT_ROOT = "C:\\Users\\s.mine\\dev\\oreilly\\"
@@ -29,7 +30,16 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		t.templ =
 			template.Must(template.ParseFiles(filepath.Join(PROJECT_ROOT+"templates", t.filename)))
 	})
-	if err := t.templ.Execute(w, r); err != nil {
+
+	data := map[string]interface{}{
+		"Host": r.Host,
+	}
+
+	if authCookie, err := r.Cookie("auth"); err == nil {
+		data["UserData"] = objx.MustFromBase64(authCookie.Value)
+	}
+
+	if err := t.templ.Execute(w, data); err != nil {
 		log.Fatal("TemplateErr:", err)
 	}
 
