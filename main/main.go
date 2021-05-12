@@ -65,6 +65,7 @@ func main() {
 
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
+	// MustAuthで認証制御してる
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/auth/", loginHandler)

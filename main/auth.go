@@ -29,10 +29,11 @@ type ClientSecret struct {
 	ClientSecret string `json:"client_secret"`
 }
 
+// authHandler用のServeHTTP
 func (h *authHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if _, err := r.Cookie("auth"); err == http.ErrNoCookie {
-		// not authenticated
+		// クッキーみて、認証情報がなかったらリダイレクト
 		w.Header().Set("Location", "/login")
 		w.WriteHeader(http.StatusTemporaryRedirect)
 
@@ -99,7 +100,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatalln("ユーザーの取得に失敗", provider, "-", err)
 		}
 
-		authCookieValue := objx.New(map[string]interface{}{"name": user.Name()}).MustBase64()
+		authCookieValue := objx.New(map[string]interface{}{
+			"name":       user.Name(),
+			"avatar_url": user.AvatarURL(),
+		}).MustBase64()
 		http.SetCookie(w, &http.Cookie{
 			Name:  "auth",
 			Value: authCookieValue,

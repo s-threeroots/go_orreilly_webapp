@@ -79,9 +79,10 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	client := &client{
-		socket:   socket,
-		send:     make(chan *message, messageBufferSize),
-		room:     r,
+		socket: socket,
+		send:   make(chan *message, messageBufferSize),
+		room:   r,
+		// ここでクッキー詰めてる
 		userData: objx.MustFromBase64(authCookie.Value),
 	}
 
