@@ -63,13 +63,17 @@ func main() {
 		google.New(authInfo.ClientSecret.ClientID, authInfo.ClientSecret.ClientSecret, "http://localhost:8080/auth/callback/google"),
 	)
 
-	r := newRoom()
+	r := newRoom(UseGravatar)
 	r.tracer = trace.New(os.Stdout)
 	// MustAuthで認証制御してる
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/auth/", loginHandler)
 	http.Handle("/room", r)
+	http.HandleFunc("/logout", logoutHandler)
+	http.Handle("/upload", MustAuth(&templateHandler{filename: "upload.html"}))
+	http.HandleFunc("/uploader", uploadHandler)
+	http.Handle("/avatars/", http.FileServer(http.Dir(PROJECT_ROOT)))
 
 	go r.run()
 	log.Println("Webサーバーを開始します。ポート: ", *addr)
