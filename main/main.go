@@ -19,6 +19,12 @@ import (
 
 var PROJECT_ROOT = "C:\\Users\\s.mine\\dev\\oreilly\\"
 
+var avatars = TryAvatars{
+	UseFileSystemAvatar,
+	UseAuthAvatar,
+	UseGravatar,
+}
+
 type templateHandler struct {
 	once     sync.Once
 	filename string
@@ -63,7 +69,7 @@ func main() {
 		google.New(authInfo.ClientSecret.ClientID, authInfo.ClientSecret.ClientSecret, "http://localhost:8080/auth/callback/google"),
 	)
 
-	r := newRoom(UseGravatar)
+	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
 	// MustAuthで認証制御してる
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
