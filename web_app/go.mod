@@ -1,4 +1,4 @@
-module oreilly
+module oreilly/web_app
 
 go 1.16
 
