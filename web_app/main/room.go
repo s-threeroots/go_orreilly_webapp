@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
-	"oreilly/trace"
+	"oreilly/web_app/trace"
 
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/objx"
