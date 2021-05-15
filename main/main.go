@@ -17,7 +17,7 @@ import (
 	"github.com/stretchr/objx"
 )
 
-var PROJECT_ROOT = "C:\\Users\\s.mine\\dev\\oreilly\\"
+var PROJECT_ROOT = "C:\\Users\\s.mine\\dev\\oreilly\\web_app\\"
 
 var avatars = TryAvatars{
 	UseFileSystemAvatar,
