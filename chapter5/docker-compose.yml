@@ -1,0 +1,39 @@
+version: "3"
+services: 
+    app: # サービス名
+        build: 
+            dockerfile: app.dockerfile
+            context: .
+        tty: true # コンテナの永続化
+        volumes:
+            - ./app:/go/src/app # マウントディレクトリ
+        working_dir: /go/src/app # workingdir
+    nsqlookupd:
+        image: nsqio/nsq
+        command: /nsqlookupd
+        ports:
+            - "4160:4160"
+            - "4161:4161"
+    nsqd:
+        image: nsqio/nsq
+        command: sh -c "/nsqd --lookupd-tcp-address=nsqlookupd:4160 && --broadcast-address=nsqlookupd"
+        depends_on:
+            - nsqlookupd
+        ports:
+            - "4150:4150"
+            - "4151:4151"
+    nsqadmin:
+        image: nsqio/nsq
+        command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+        depends_on:
+            - nsqlookupd  
+        ports:
+            - "4171:4171"
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+        ports:
+            - "27017:27"
