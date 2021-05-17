@@ -2,7 +2,7 @@
     "name": "Go",
     "dockerComposeFile": ["../chapter5/docker-compose.yml"],
     "service": "app" ,
-    "workspaceFolder": "/go/src/app",
+    "workspaceFolder": "/go/src",
     "settings": {
       "terminal.integrated.shell.linux": "/bin/bash",
       "go.toolsManagement.checkForUpdates": "off",

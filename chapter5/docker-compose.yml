@@ -7,7 +7,10 @@ services:
         tty: true # コンテナの永続化
         volumes:
             - ./app:/go/src/app # マウントディレクトリ
-        working_dir: /go/src/app # workingdir
+            - ../.vscode:/go/src/.vscode # マウントディレクトリ
+        working_dir: /go/src # workingdir
+        env_file:
+            - ./.env
     nsqlookupd:
         image: nsqio/nsq
         command: /nsqlookupd
