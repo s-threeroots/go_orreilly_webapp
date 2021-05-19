@@ -98,6 +98,10 @@ type tweet struct {
 	Text string
 }
 
+/*
+APIの仕様は以下に載ってた
+https://developer.twitter.com/en/docs/twitter-api/v1/tweets/filter-realtime/api-reference/post-statuses-filter
+*/
 func readFromTwitter(votes chan<- string) {
 
 	options, err := loadOptions()
