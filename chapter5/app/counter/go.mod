@@ -1,4 +1,4 @@
-module oreilly/chapter5
+module oreilly/chapter5/counter
 
 go 1.16
 

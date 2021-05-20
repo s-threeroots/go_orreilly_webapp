@@ -1,4 +1,4 @@
-module oreilly/chapter5
+module oreilly/chapter5/twitterVotes
 
 go 1.16
 
