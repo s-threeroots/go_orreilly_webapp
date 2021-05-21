@@ -4,7 +4,9 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/stretchr/graceful"
 	"gopkg.in/mgo.v2"
 )
 
@@ -21,15 +23,13 @@ func main() {
 		log.Fatalln("Failed connectiong MongoDB: ", err)
 	}
 	defer db.Close()
-	/* 	mux := http.NewServeMux()
-	   	mux.HandleFunc("/polls/", withCORS(withVars(withData(db, withAPIKey(handlePolls)))))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/polls/", withCORS(withVars(withData(db, withAPIKey(handlePolls)))))
 
-	   	log.Println("Starting Web server:", mux)
-	   	graceful.Run(*addr, 1*time.Second, mux)
-	   	log.Println("Quiting...")
-	*/
-	http.HandleFunc("/polls/", withCORS(withVars(withData(db, withAPIKey(handlePolls)))))
-	http.ListenAndServe(*addr, nil)
+	log.Println("Starting Web server:", mux)
+	graceful.Run(*addr, 1*time.Second, mux)
+	log.Println("Quiting...")
+
 }
 
 func withAPIKey(fn http.HandlerFunc) http.HandlerFunc {

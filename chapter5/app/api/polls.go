@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"gopkg.in/mgo.v2"
@@ -16,7 +15,6 @@ type poll struct {
 }
 
 func handlePolls(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Body)
 	switch r.Method {
 	case "GET":
 		handlePollsGet(w, r)
